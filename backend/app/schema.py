@@ -88,32 +88,24 @@ class CategoryMutation(graphene.Mutation):
         return CategoryMutation(category=category)
 
 
-
-
-
-
-
-
-
-
-
-
 class QuizzesMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
+        title = graphene.String(required=True)
 
     quiz = graphene.Field(QuizzesType)
 
     @classmethod
-    def mutate(cls, root, info, id):
+    def mutate(cls, root, info, id, title):
         quiz = Quizzes.objects.get(id=id)
-        quiz.delete()
+        quiz.title = title
+        quiz.save()
         return QuizzesMutation(quiz=quiz)
 
 
 class Mutation(graphene.ObjectType):
     update_category = CategoryMutation.Field()
-    delete_quizzes = QuizzesMutation.Field()
+    update_quizzes = QuizzesMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

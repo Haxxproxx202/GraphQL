@@ -11,6 +11,10 @@ class User(AbstractUser):
     base_role = Role.ADMIN
 
     role = models.CharField(max_length=50, choices=Role.choices)
+    email = models.EmailField(blank=False, max_length=255, verbose_name="email")
+
+    USERNAME_FIELD = "username"
+    EMAIL_FIELD = "email"
 
     def save(self, *args, **kwargs):
         if not self.pk:
